@@ -1,7 +1,7 @@
 
 {
   "Sofa": {
-    "model_size": [2, 2],
+    "model_size": [3,3],
     "model_picture": "/sofa.png",
     "placedPositions": null
   },
