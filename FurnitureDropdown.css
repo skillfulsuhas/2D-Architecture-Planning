@@ -1,0 +1,40 @@
+/* FurnitureDropdown.css */
+.furniture-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.furniture-dropdown input {
+  padding: 10px;
+  background-color: #2a2a2a;
+  border: none;
+  color: #ffffff;
+}
+
+.furniture-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.furniture-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #2a2a2a;
+  cursor: pointer;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+.furniture-item:hover {
+  background-color: #3a3a3a;
+}
+
+.furniture-image {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  object-fit: contain;
+}

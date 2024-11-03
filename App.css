@@ -1,0 +1,182 @@
+/* App.css */
+:root {
+  --primary-color: #4a90e2; /* Cool blue */
+  --secondary-color: #50e3c2; /* Refreshing teal */
+  --background-dark: #1c1c1e; /* Dark background */
+  --background-light: #2c2c2e; /* Slightly lighter background */
+  --text-light: #f5f5f7; /* Very light text */
+  --text-dark: #333333; /* Dark text for contrast */
+  --accent-color: #ff5a5f; /* Vibrant accent color */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-light);
+  background-color: var(--background-dark);
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  background-color: var(--background-dark);
+}
+
+.sidebar {
+  width: 250px;
+  background-color: var(--background-light);
+  color: var(--text-light);
+  padding: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.sidebar:hover {
+  width: 280px;
+}
+
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--background-dark);
+  overflow-y: auto;
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: var(--background-light);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.toolbar button {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1em;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.toolbar button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.properties-panel {
+  width: 250px;
+  background-color: var(--background-light);
+  color: var(--text-light);
+  padding: 20px;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.room-dimensions {
+  color: var(--text-light);
+  margin-top: 20px;
+}
+
+.room-dimensions label {
+  display: block;
+  margin: 15px 0;
+  font-weight: 500;
+}
+
+.room-dimensions input {
+  width: 80px;
+  padding: 8px;
+  background-color: var(--background-dark);
+  border: 1px solid var(--primary-color);
+  color: var(--text-light);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.room-dimensions input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(255, 90, 95, 0.2);
+}
+
+.furniture-positions {
+  margin-top: 20px;
+  color: var(--text-light);
+}
+
+.placed-furniture-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 8px 0;
+  background-color: var(--background-dark);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.placed-furniture-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.furniture-thumbnail {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+  object-fit: contain;
+  border-radius: 4px;
+  background-color: var(--background-light);
+  padding: 4px;
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .sidebar, .properties-panel {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .main-content {
+    padding: 10px;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}

@@ -1,0 +1,23 @@
+
+{
+  "Sofa": {
+    "model_size": [2, 2],
+    "model_picture": "/sofa.png",
+    "placedPositions": null
+  },
+  "Table": {
+    "model_size": [3, 3],
+    "model_picture": "/table.png",
+    "placedPositions": null
+  },
+  "Chair": {
+    "model_size": [2, 2],
+    "model_picture": "/chair.png",
+    "placedPositions": null
+  },
+  "Fridge": {
+    "model_size": [3, 3],
+    "model_picture": "/fridge.png",
+    "placedPositions": null
+  }
+}
