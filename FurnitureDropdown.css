@@ -1,40 +1,85 @@
-/* FurnitureDropdown.css */
 .furniture-dropdown {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.furniture-dropdown input {
-  padding: 10px;
-  background-color: #2a2a2a;
-  border: none;
-  color: #ffffff;
+.furniture-search {
+  padding: 12px;
+  background-color: white;
+  border: 1px solid #ddd;
+  color: #333;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.furniture-search:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
 }
 
 .furniture-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .furniture-item {
   display: flex;
   align-items: center;
-  padding: 10px;
-  background-color: #2a2a2a;
+  padding: 12px;
+  background-color: white;
   cursor: pointer;
-  color: #ffffff;
+  color: #333;
   border-radius: 4px;
+  border: 1px solid #ddd;
+  transition: all 0.2s ease-in-out;
+  text-align: left;
+  width: 100%;
 }
 
 .furniture-item:hover {
-  background-color: #3a3a3a;
+  background-color: #f5f5f5;
+  border-color: var(--primary-color);
 }
 
 .furniture-image {
   width: 40px;
   height: 40px;
-  margin-right: 10px;
-  object-fit: contain;
+  object-fit: cover;
+  margin-right: 12px;
+  border-radius: 4px;
+}
+
+.furniture-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Scrollbar Styles */
+.furniture-list::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.furniture-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.furniture-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.furniture-list::-webkit-scrollbar-thumb:hover {
+  background: #999;
 }

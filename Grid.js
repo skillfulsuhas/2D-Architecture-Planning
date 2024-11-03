@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
-import { RotateCw } from 'lucide-react';
+import { FlipHorizontal } from 'lucide-react';
 import './grid.css';
 
-const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitureAdd, onFurnitureMove }) => {
+const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitureAdd, onFurnitureMove, showGrid }) => {
   const [rows, setRows] = useState(Math.floor(height / 50));
   const [columns, setColumns] = useState(Math.floor(width / 50));
 
@@ -39,16 +39,18 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
       col: startCol,
       width: furnitureWidth,
       height: furnitureHeight,
-      rotation: 0, // Add initial rotation
+      flipped: false,
     };
 
     onFurnitureAdd(newFurniture);
   };
 
-  const isAreaOccupied = (startRow, startCol, width, height) => {
+  const isAreaOccupied = (startRow, startCol, width, height, excludeId = null) => {
     return furniturePositions.some(furniture => {
-      const furnitureEndRow = furniture.row + (furniture.rotation % 180 === 0 ? furniture.height : furniture.width);
-      const furnitureEndCol = furniture.col + (furniture.rotation % 180 === 0 ? furniture.width : furniture.height);
+      if (furniture.id === excludeId) return false;
+
+      const furnitureEndRow = furniture.row + furniture.height;
+      const furnitureEndCol = furniture.col + furniture.width;
       const newFurnitureEndRow = startRow + height;
       const newFurnitureEndCol = startCol + width;
 
@@ -66,15 +68,12 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
     const newCol = Math.round(data.x / 50);
     const furniture = furniturePositions.find(f => f.id === furnitureId);
 
-    const rotatedWidth = furniture.rotation % 180 === 0 ? furniture.width : furniture.height;
-    const rotatedHeight = furniture.rotation % 180 === 0 ? furniture.height : furniture.width;
-
     if (
       newRow < 0 ||
       newCol < 0 ||
-      newRow + rotatedHeight > rows ||
-      newCol + rotatedWidth > columns ||
-      isAreaOccupied(newRow, newCol, rotatedWidth, rotatedHeight)
+      newRow + furniture.height > rows ||
+      newCol + furniture.width > columns ||
+      isAreaOccupied(newRow, newCol, furniture.width, furniture.height, furnitureId)
     ) {
       return; // Prevent the move if it's invalid
     }
@@ -82,23 +81,11 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
     onFurnitureMove(furnitureId, { row: newRow, col: newCol });
   };
 
-  const handleRotate = (furnitureId) => {
+  const handleFlip = (furnitureId) => {
     const furniture = furniturePositions.find(f => f.id === furnitureId);
-    const newRotation = (furniture.rotation + 90) % 360;
+    const newFlipped = !furniture.flipped;
 
-    const rotatedWidth = newRotation % 180 === 0 ? furniture.width : furniture.height;
-    const rotatedHeight = newRotation % 180 === 0 ? furniture.height : furniture.width;
-
-    if (
-      furniture.row + rotatedHeight > rows ||
-      furniture.col + rotatedWidth > columns ||
-      isAreaOccupied(furniture.row, furniture.col, rotatedWidth, rotatedHeight)
-    ) {
-      alert("Can't rotate here due to space constraints.");
-      return;
-    }
-
-    onFurnitureMove(furnitureId, { rotation: newRotation });
+    onFurnitureMove(furnitureId, { flipped: newFlipped });
   };
 
   return (
@@ -109,25 +96,27 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
         height: `${rows * 50}px`,
       }}
     >
-      <div 
-        className="grid"
-        style={{ 
-          gridTemplateColumns: `repeat(${columns}, 50px)`,
-          gridTemplateRows: `repeat(${rows}, 50px)`,
-        }}
-      >
-        {Array.from({ length: rows * columns }).map((_, index) => {
-          const rowIndex = Math.floor(index / columns);
-          const colIndex = index % columns;
-          return (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              className="grid-cell"
-              onClick={() => handleCellClick(rowIndex, colIndex)}
-            />
-          );
-        })}
-      </div>
+      {showGrid && (
+        <div 
+          className="grid"
+          style={{ 
+            gridTemplateColumns: `repeat(${columns}, 50px)`,
+            gridTemplateRows: `repeat(${rows}, 50px)`,
+          }}
+        >
+          {Array.from({ length: rows * columns }).map((_, index) => {
+            const rowIndex = Math.floor(index / columns);
+            const colIndex = index % columns;
+            return (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                className="grid-cell"
+                onClick={() => handleCellClick(rowIndex, colIndex)}
+              />
+            );
+          })}
+        </div>
+      )}
       {furniturePositions.map((furniture) => (
         <Draggable
           key={furniture.id}
@@ -141,22 +130,30 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
             style={{
               width: furniture.width * 50,
               height: furniture.height * 50,
-              transform: `rotate(${furniture.rotation}deg)`,
-              backgroundImage: `url(${furniture.model_picture})`,
-              backgroundSize: 'cover',
               position: 'absolute',
               zIndex: 10,
               cursor: 'move',
             }}
           >
+            <img
+              src={furniture.model_picture}
+              alt={furniture.model_name}
+              className="furniture-image"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                transform: furniture.flipped ? 'scaleX(-1)' : 'none',
+              }}
+            />
             <button
-              className="rotate-button"
+              className="flip-button"
               onClick={(e) => {
                 e.stopPropagation();
-                handleRotate(furniture.id);
+                handleFlip(furniture.id);
               }}
             >
-              <RotateCw size={16} />
+              <FlipHorizontal size={16} />
             </button>
           </div>
         </Draggable>
