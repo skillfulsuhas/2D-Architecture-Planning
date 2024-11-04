@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import { FlipHorizontal } from 'lucide-react';
@@ -16,6 +17,13 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
     setColumns(newColumns);
   }, [width, height]);
 
+  // Function to convert grid coordinates to actual coordinates
+  function convertGridToActual(gridX, gridY) {
+    const actualX = gridX - Math.floor(columns / 2);
+    const actualY = Math.floor(rows / 2) - gridY;
+    return { x: actualX, y: actualY };
+  }
+
   const handleCellClick = (startRow, startCol) => {
     if (!selectedFurniture) return;
 
@@ -32,12 +40,13 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
       return;
     }
 
+    const { x, y } = convertGridToActual(startCol, startRow);
     const newFurniture = {
       id: Date.now(),
       model_name,
       model_picture,
-      row: startRow,
-      col: startCol,
+      x,
+      y,
       width: furnitureWidth,
       height: furnitureHeight,
       flipped: false,
@@ -65,21 +74,20 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
   };
 
   const handleDragStop = (furnitureId, e, data) => {
-    const newRow = Math.round(data.y / CELL_SIZE);
-    const newCol = Math.round(data.x / CELL_SIZE);
+    const { x, y } = convertGridToActual(Math.round(data.x / CELL_SIZE), Math.round(data.y / CELL_SIZE));
     const furniture = furniturePositions.find(f => f.id === furnitureId);
 
     if (
-      newRow < 0 ||
-      newCol < 0 ||
-      newRow + furniture.height > rows ||
-      newCol + furniture.width > columns ||
-      isAreaOccupied(newRow, newCol, furniture.width, furniture.height, furnitureId)
+      x < -Math.floor(columns / 2) ||
+      y < -Math.floor(rows / 2) ||
+      x + furniture.width > Math.floor(columns / 2) ||
+      y - furniture.height < -Math.floor(rows / 2) ||
+      isAreaOccupied(Math.round(data.y / CELL_SIZE), Math.round(data.x / CELL_SIZE), furniture.width, furniture.height, furnitureId)
     ) {
-      return; // Prevent the move if it's invalid
+      return;
     }
 
-    onFurnitureMove(furnitureId, { row: newRow, col: newCol });
+    onFurnitureMove(furnitureId, { x, y });
   };
 
   const handleFlip = (furnitureId) => {
@@ -125,30 +133,47 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
           key={furniture.id}
           bounds="parent"
           grid={[CELL_SIZE, CELL_SIZE]}
-          position={{ x: furniture.col * CELL_SIZE, y: furniture.row * CELL_SIZE }}
+          position={{ x: (furniture.x + Math.floor(columns / 2)) * CELL_SIZE, y: (Math.floor(rows / 2) - furniture.y) * CELL_SIZE }}
           onStop={(e, data) => handleDragStop(furniture.id, e, data)}
         >
           <div
             className="furniture-item"
             style={{
-              width: furniture.width * CELL_SIZE,
-              height: furniture.height * CELL_SIZE,
+              width: `${furniture.width * CELL_SIZE}px`,
+              height: `${furniture.height * CELL_SIZE}px`,
               position: 'absolute',
               zIndex: 10,
               cursor: 'move',
+              display: 'grid',
+              gridTemplateColumns: `repeat(${furniture.width}, 1fr)`,
+              gridTemplateRows: `repeat(${furniture.height}, 1fr)`,
             }}
           >
-            <img
-              src={furniture.model_picture}
-              alt={furniture.model_name}
-              className="furniture-image"
+            <div 
+              className="furniture-image-container"
               style={{
+                gridColumn: `1 / span ${furniture.width}`,
+                gridRow: `1 / span ${furniture.height}`,
                 width: '100%',
                 height: '100%',
-                objectFit: 'contain',
-                transform: furniture.flipped ? 'scaleX(-1)' : 'none',
+                position: 'relative',
               }}
-            />
+            >
+              <img
+                src={furniture.model_picture}
+                alt={furniture.model_name}
+                className="furniture-image"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transform: furniture.flipped ? 'scaleX(-1)' : 'none',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                }}
+              />
+            </div>
             <button
               className="flip-button"
               onClick={(e) => {

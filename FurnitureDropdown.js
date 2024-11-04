@@ -1,8 +1,7 @@
-// FurnitureDropdown.js
 import React, { useState } from 'react';
 import './FurnitureDropdown.css';
 
-const FurnitureDropdown = ({ models, onSelect }) => {
+export default function FurnitureDropdown({ models, onSelect }) {
   const [searchText, setSearchText] = useState('');
 
   const filteredModels = Object.keys(models).filter((modelName) =>
@@ -20,10 +19,11 @@ const FurnitureDropdown = ({ models, onSelect }) => {
         placeholder="Search furniture..."
         value={searchText}
         onChange={handleSearchChange}
+        className="furniture-search"
       />
       <div className="furniture-list">
         {filteredModels.map((modelName, index) => (
-          <div
+          <button
             key={index}
             className="furniture-item"
             onClick={() => onSelect(modelName)}
@@ -33,12 +33,10 @@ const FurnitureDropdown = ({ models, onSelect }) => {
               alt={modelName}
               className="furniture-image"
             />
-            <p>{modelName}</p>
-          </div>
+            <span className="furniture-name">{modelName}</span>
+          </button>
         ))}
       </div>
     </div>
   );
-};
-
-export default FurnitureDropdown;
+}

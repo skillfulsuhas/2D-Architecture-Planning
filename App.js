@@ -1,28 +1,24 @@
+
 import React, { useState, useEffect } from 'react';
 import Grid from './Grid';
 import FurnitureDropdown from './FurnitureDropdown';
-import Tutorial from './Tutorial';
 import Toolbar from './Toolbar';
 import models from './models.json';
 import './App.css';
+import Tutorial from './Tutorial'; // Make sure to import the Tutorial component
 
 export default function App() {
   const [selectedFurniture, setSelectedFurniture] = useState(null);
-  const [roomWidth, setRoomWidth] = useState(900);
-  const [roomHeight, setRoomHeight] = useState(900);
+  const [roomWidth, setRoomWidth] = useState(1000);
+  const [roomHeight, setRoomHeight] = useState(1000);
   const [furniturePositions, setFurniturePositions] = useState([]);
-  const [showTutorial, setShowTutorial] = useState(true);
+  const [showTutorial, setShowTutorial] = useState(true); // Initially set to true to show the tutorial
   const [showGrid, setShowGrid] = useState(true);
   const [unit, setUnit] = useState('cm');
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
 
-  useEffect(() => {
-    const tutorialShown = localStorage.getItem('tutorialShown');
-    if (tutorialShown) {
-      setShowTutorial(false);
-    }
-  }, []);
+  // Removed the useEffect hook that checks for 'tutorialShown' in localStorage
 
   const handleFurnitureSelect = (modelName) => {
     const furnitureData = models[modelName];
@@ -72,7 +68,7 @@ export default function App() {
 
   const closeTutorial = () => {
     setShowTutorial(false);
-    localStorage.setItem('tutorialShown', 'true');
+    // Removed the line that saves 'tutorialShown' to localStorage
   };
 
   const addToHistory = () => {
@@ -182,41 +178,7 @@ export default function App() {
             showGrid={showGrid}
           />
         </main>
-        
-        <aside className="properties-panel">
-          <h2 className="panel-title">Properties</h2>
-          <div className="room-dimensions">
-            <h3 className="dimensions-title">Room Dimensions</h3>
-            <div className="dimension-input">
-              <label htmlFor="width">Width:</label>
-              <div className="input-group">
-                <input
-                  id="width"
-                  type="number"
-                  value={unit === 'cm' ? roomWidth : Math.round(roomWidth / 2.54)}
-                  onChange={(e) => handleRoomDimensionChange('width', unit === 'cm' ? parseInt(e.target.value) : Math.round(parseInt(e.target.value) * 2.54))}
-                  min="200"
-                  max="2000"
-                />
-                <span className="unit">{unit}</span>
-              </div>
-            </div>
-            <div className="dimension-input">
-              <label htmlFor="height">Height:</label>
-              <div className="input-group">
-                <input
-                  id="height"
-                  type="number"
-                  value={unit === 'cm' ? roomHeight : Math.round(roomHeight / 2.54)}
-                  onChange={(e) => handleRoomDimensionChange('height', unit === 'cm' ? parseInt(e.target.value) : Math.round(parseInt(e.target.value) * 2.54))}
-                  min="200"
-                  max="2000"
-                />
-                <span className="unit">{unit}</span>
-              </div>
-            </div>
-          </div>
-        </aside>
+      
       </div>
     </div>
   );

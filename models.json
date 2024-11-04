@@ -17,7 +17,7 @@
   },
   "Fridge": {
     "model_size": [3, 3],
-    "model_picture": "/fridge.png",
+    "model_picture": "/fridge.jpg",
     "placedPositions": null
   }
 }
