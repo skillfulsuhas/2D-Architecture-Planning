@@ -1,79 +1,91 @@
 .grid-container {
   position: relative;
-  background-color: #e0f7fa;
-  padding: 10px;
+  background-color: var(--background-color);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(139, 69, 19, 0.1);
   transition: all 0.3s ease;
 }
 
 .grid-container:hover {
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 24px rgba(139, 69, 19, 0.15);
   transform: translateY(-2px);
+}
+
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .grid {
   display: grid;
-  gap: 1px;
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.1);
+  pointer-events: all;
 }
 
 .grid-cell {
-  width: 50px;
-  height: 50px;
-  border: 1px solid rgba(204, 204, 204, 0.3);
-  background-color: rgba(255, 255, 255, 0.05);
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--secondary-color);
+  background-color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .grid-cell:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
+  background-color: rgba(210, 180, 140, 0.2);
   z-index: 1;
 }
 
 .furniture-item {
+  background-color: white;
   cursor: move;
   user-select: none;
   transition: all 0.3s ease;
   border-radius: 8px;
+  border: 2px solid var(--secondary-color);
+  box-sizing: border-box;
 }
 
 .furniture-item:hover {
   transform: scale(1.02);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 12px rgba(139, 69, 19, 0.15);
 }
 
 .furniture-image {
   width: 100%;
   height: 100%;
   transition: transform 0.3s ease;
+  padding: 4px;
+  box-sizing: border-box;
 }
 
 .flip-button {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #ccc;
+  top: 8px;
+  right: 8px;
+  background-color: white;
+  border: 1px solid var(--secondary-color);
   border-radius: 50%;
   width: 30px;
   height: 30px;
   display: flex;
-  
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 18px;
   z-index: 11;
   transition: all 0.2s ease;
+  color: var(--primary-color);
 }
 
 .flip-button:hover {
@@ -82,17 +94,11 @@
   transform: rotate(180deg);
 }
 
-/* Add a subtle grid animation */
+/* Grid Pattern Animation */
 @keyframes gridPulse {
-  0% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.7;
-  }
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
 }
 
 .grid::before {
@@ -102,10 +108,20 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, rgba(58, 134, 255, 0.1) 25%, transparent 25%, transparent 75%, rgba(58, 134, 255, 0.1) 75%, rgba(58, 134, 255, 0.1)),
-              linear-gradient(45deg, rgba(58, 134, 255, 0.1) 25%, transparent 25%, transparent 75%, rgba(58, 134, 255, 0.1) 75%, rgba(58, 134, 255, 0.1));
-  background-size: 100px 100px;
-  background-position: 0 0, 50px 50px;
+  background: linear-gradient(45deg, 
+    rgba(139, 69, 19, 0.05) 25%, 
+    transparent 25%, 
+    transparent 75%, 
+    rgba(139, 69, 19, 0.05) 75%, 
+    rgba(139, 69, 19, 0.05)),
+    linear-gradient(45deg, 
+    rgba(139, 69, 19, 0.05) 25%, 
+    transparent 25%, 
+    transparent 75%, 
+    rgba(139, 69, 19, 0.05) 75%, 
+    rgba(139, 69, 19, 0.05));
+  background-size: 50px 50px;
+  background-position: 0 0, 25px 25px;
   animation: gridPulse 4s infinite;
   pointer-events: none;
 }

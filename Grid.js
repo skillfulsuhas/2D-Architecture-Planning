@@ -6,10 +6,11 @@ import './grid.css';
 const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitureAdd, onFurnitureMove, showGrid }) => {
   const [rows, setRows] = useState(Math.floor(height / 50));
   const [columns, setColumns] = useState(Math.floor(width / 50));
+  const CELL_SIZE = 50;
 
   useEffect(() => {
-    const newRows = Math.floor(height / 50);
-    const newColumns = Math.floor(width / 50);
+    const newRows = Math.floor(height / CELL_SIZE);
+    const newColumns = Math.floor(width / CELL_SIZE);
     
     setRows(newRows);
     setColumns(newColumns);
@@ -64,8 +65,8 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
   };
 
   const handleDragStop = (furnitureId, e, data) => {
-    const newRow = Math.round(data.y / 50);
-    const newCol = Math.round(data.x / 50);
+    const newRow = Math.round(data.y / CELL_SIZE);
+    const newCol = Math.round(data.x / CELL_SIZE);
     const furniture = furniturePositions.find(f => f.id === furnitureId);
 
     if (
@@ -92,44 +93,46 @@ const Grid = ({ width, height, selectedFurniture, furniturePositions, onFurnitur
     <div 
       className="grid-container"
       style={{ 
-        width: `${columns * 50}px`, 
-        height: `${rows * 50}px`,
+        width: `${columns * CELL_SIZE}px`, 
+        height: `${rows * CELL_SIZE}px`,
       }}
     >
       {showGrid && (
-        <div 
-          className="grid"
-          style={{ 
-            gridTemplateColumns: `repeat(${columns}, 50px)`,
-            gridTemplateRows: `repeat(${rows}, 50px)`,
-          }}
-        >
-          {Array.from({ length: rows * columns }).map((_, index) => {
-            const rowIndex = Math.floor(index / columns);
-            const colIndex = index % columns;
-            return (
-              <div
-                key={`${rowIndex}-${colIndex}`}
-                className="grid-cell"
-                onClick={() => handleCellClick(rowIndex, colIndex)}
-              />
-            );
-          })}
+        <div className="grid-overlay">
+          <div 
+            className="grid"
+            style={{ 
+              gridTemplateColumns: `repeat(${columns}, ${CELL_SIZE}px)`,
+              gridTemplateRows: `repeat(${rows}, ${CELL_SIZE}px)`,
+            }}
+          >
+            {Array.from({ length: rows * columns }).map((_, index) => {
+              const rowIndex = Math.floor(index / columns);
+              const colIndex = index % columns;
+              return (
+                <div
+                  key={`${rowIndex}-${colIndex}`}
+                  className="grid-cell"
+                  onClick={() => handleCellClick(rowIndex, colIndex)}
+                />
+              );
+            })}
+          </div>
         </div>
       )}
       {furniturePositions.map((furniture) => (
         <Draggable
           key={furniture.id}
           bounds="parent"
-          grid={[50, 50]}
-          position={{ x: furniture.col * 50, y: furniture.row * 50 }}
+          grid={[CELL_SIZE, CELL_SIZE]}
+          position={{ x: furniture.col * CELL_SIZE, y: furniture.row * CELL_SIZE }}
           onStop={(e, data) => handleDragStop(furniture.id, e, data)}
         >
           <div
             className="furniture-item"
             style={{
-              width: furniture.width * 50,
-              height: furniture.height * 50,
+              width: furniture.width * CELL_SIZE,
+              height: furniture.height * CELL_SIZE,
               position: 'absolute',
               zIndex: 10,
               cursor: 'move',
